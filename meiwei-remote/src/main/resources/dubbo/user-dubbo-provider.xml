@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--&lt;!&ndash; 提供方应用信息，用于计算依赖关系 &ndash;&gt;-->
+    <!--<dubbo:application name="meiwei-dubbo-provider"/>-->
+    <!--&lt;!&ndash; 使用zookeeper注册中心暴露服务地址 &ndash;&gt;-->
+    <!--&lt;!&ndash;<dubbo:registry protocol="zookeeper" address="10.6.25.113:2181" register="false"/>&ndash;&gt;-->
+    <!--&lt;!&ndash; 使用zookeeper注册中心暴露服务地址 &ndash;&gt;-->
+    <!--<dubbo:registry address="zookeeper://10.6.25.113:2181" />-->
+    <!--&lt;!&ndash; 用dubbo协议在20882端口暴露服务 &ndash;&gt;-->
+    <!--<dubbo:protocol name="dubbo" port="20882"/>-->
+
+
+    <!--&lt;!&ndash; 提供方应用信息，用于计算依赖关系 &ndash;&gt;-->
+    <!--<dubbo:application name="dubboProvider" />-->
+
+    <!--&lt;!&ndash; 使用zookeeper注册中心暴露服务地址 &ndash;&gt;-->
+    <!--<dubbo:registry address="zookeeper://127.0.0.1:2181" />-->
+
+    <!--&lt;!&ndash; 用dubbo协议在20880端口暴露服务 &ndash;&gt;-->
+    <!--<dubbo:protocol name="dubbo" port="20880" />-->
+    <!--&lt;!&ndash; 启用monitor模块 &ndash;&gt;-->
+    <!--<dubbo:monitor protocol="registry" />-->
+
+    <dubbo:service interface="com.meiwei.api.dubbo.user.restapi.IUserDubbo" ref="iUserDubbo" timeout="50000" group="meiwei"/>
+
+</beans>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--扫描的基本包路径-->
+    <!--查找使用构造型（stereotype）注解所标注的类，如@Component(组件)，@Service（服务），@Controller（控制器），@Repository（数据仓库）-->
+    <context:component-scan base-package="com.meiwei.service"/>
+
+    <bean class="com.meiwei.remote.config.provider.ProviderConfiguration" id="providerConfiguration" />
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:redis/redis.properties</value>
+                <!--<value>classpath:dubbo.properties</value>-->
+                <!--<value>classpath:zookeeper.properties</value>-->
+            </list>
+        </property>
+    </bean>
+
+    <import resource="classpath*:dubbo/user-dubbo-provider.xml"/>
+
+</beans>

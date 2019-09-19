@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!--向资源池借用连接时是否做连接有效性检测（ping）。检测到的无效连接将会被移除。如果为true，则得到的jedis实例均是可用的-->
+        <property name="testOnBorrow" value="true"/>
+        <!--资源池中的最大连接数，默认8个-->
+        <property name="maxTotal" value="50" />
+        <!--资源池允许的最大空闲连接数，默认8个-->
+        <property name="maxIdle" value="50" />
+        <!--当资源池连接用尽后，调用者的最大等待时间（单位为毫秒）。-->
+        <property name="maxWaitMillis" value="3000" />
+    </bean>
+
+    <util:set id="sentinels">
+        <value>${redis.sentinel.node1}</value>
+        <value>${redis.sentinel.node2}</value>
+        <value>${redis.sentinel.node3}</value>
+    </util:set>
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisSentinelPool" destroy-method="destroy"
+          c:poolConfig-ref="jedisPoolConfig" c:sentinels-ref="sentinels"
+          c:masterName="${redis.sentinel.master}"/>
+
+    <!--这里没有配置密码，所以不需求使用此项配置-->
+    <!--<bean id="jedisPool" class="redis.clients.jedis.JedisSentinelPool" destroy-method="destroy"-->
+          <!--c:poolConfig-ref="jedisPoolConfig" c:sentinels-ref="sentinels"-->
+          <!--c:masterName="${redis.sentinel.master}" c:password="${redis.password}"/>-->
+</beans>
