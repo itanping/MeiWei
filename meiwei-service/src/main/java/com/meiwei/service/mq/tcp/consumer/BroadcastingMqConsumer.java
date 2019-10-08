@@ -10,24 +10,24 @@ import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import java.util.List;
 
 /**
- * 广播消息 - 广播消费（Broadcasting）
+ * 广播消费模式（Broadcasting）
  * 广播消费模式下，相同Consumer Group的每个Consumer实例都接收全量的消息。
  *
  * @author tanping
  * @date 2019/9/24 13:30
  */
-public class BroadcastMqConsumer {
+public class BroadcastingMqConsumer {
 
     // Message 所属的 Topic 一级分类，须要与提供者的频道保持一致才能消费到消息内容
     private static final String MQ_CONFIG_TOPIC = "TOPIC_MEIWEI_SMS_NOTICE_TEST";
-    private static final String MQ_CONFIG_TAG_PUSH = "PID_MEIWEI_SMS_BROADCAST";
+    private static final String MQ_CONFIG_TAG_PUSH = "PID_MEIWEI_SMS_BROADCASTING";
     private static final String MQ_CONFIG_TAG_PUSH_OTHER = "PID_MEIWEI_SMS_OTHER";
 
     public static void main(String[] args) throws Exception {
 
         // 声明并初始化一个 consumer
         // 需要一个 consumer group 名字作为构造方法的参数
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("meiwei-consumer-broadcast");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("meiwei-consumer-broadcasting");
 
         // 同样也要设置 NameServer 地址，须要与提供者的地址列表保持一致
         consumer.setNamesrvAddr("127.0.0.1:9876");
@@ -63,6 +63,6 @@ public class BroadcastMqConsumer {
 
         // 调用 start() 方法启动 consumer
         consumer.start();
-        System.out.println("Broadcast Consumer Started.");
+        System.out.println("Broadcasting Consumer Started.");
     }
 }
