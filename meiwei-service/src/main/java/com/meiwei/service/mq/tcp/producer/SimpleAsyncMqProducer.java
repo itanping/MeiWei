@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 可靠异步发送
+ * 可靠异步发送 - 生产者
  * <p>
  * 原理
  * 异步发送是指发送方发出数据后，不等接收方发回响应，接着发送下个数据包的通讯方式。

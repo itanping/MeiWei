@@ -9,6 +9,9 @@ import org.apache.rocketmq.common.message.MessageExt;
 
 import java.util.List;
 
+/**
+ * 单向（Oneway）发送 - 消费者（Push模式）
+ */
 public class SimpleMqPushOnewayConsumer {
     // Topic 为 Message 所属的一级分类，就像学校里面的初中、高中
     // Topic 名称长度不得超过 64 字符长度限制，否则会导致无法发送或者订阅

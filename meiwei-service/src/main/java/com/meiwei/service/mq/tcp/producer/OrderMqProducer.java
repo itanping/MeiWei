@@ -58,7 +58,8 @@ public class OrderMqProducer {
 
             // 新建一条消息，指定topic，tag、key和body
             // KEY 就好比具体某个班级，唯一
-            Message message = new Message(MQ_CONFIG_TOPIC, tags[i % tags.length], "KEY" + i, content.getBytes(RemotingHelper.DEFAULT_CHARSET));
+            Message message = new Message(MQ_CONFIG_TOPIC, tags[i % tags.length], "KEY" + i,
+                    content.getBytes(RemotingHelper.DEFAULT_CHARSET));
 
             // 提交消息，制定 queue 选择器和排序参数
             // 做了一个取模运算再丢到 selector 中，selector 保证同一个模的都会投递到同一条 queue

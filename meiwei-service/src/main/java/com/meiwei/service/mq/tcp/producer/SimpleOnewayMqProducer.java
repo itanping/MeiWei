@@ -5,7 +5,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
 /**
- * 单向（Oneway）发送
+ * 单向（Oneway）发送 - 生产者
  * <p>
  * 原理
  * 单向（Oneway）发送特点为发送方只负责发送消息，不等待服务器回应且没有回调函数触发，即只发送请求不等待应答。

@@ -8,7 +8,7 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 import java.util.Date;
 
 /**
- * 可靠同步发送
+ * 可靠同步发送 - 生产者
  * <p>
  * 原理
  * 同步发送是指消息发送方发出数据后，会在收到接收方发回响应之后才发下一个数据包的通讯方式。
