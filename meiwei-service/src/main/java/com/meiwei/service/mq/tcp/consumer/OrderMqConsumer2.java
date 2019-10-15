@@ -21,11 +21,8 @@ public class OrderMqConsumer2 {
          * 如果非第一次启动，那么按照上次消费的位置继续消费
          */
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-
         consumer.subscribe("TOPIC_MEIWEI_SMS_NOTICE_MSG_PUSH_TEST", "TagA || TagC || TagD");
-
         consumer.registerMessageListener(new MessageListenerOrderly() {
-
             Random random = new Random();
 
             @Override
@@ -37,7 +34,7 @@ public class OrderMqConsumer2 {
                 }
 
                 try {
-                    //模拟业务逻辑处理中...
+                    // 模拟业务逻辑处理中...
                     TimeUnit.SECONDS.sleep(random.nextInt(10));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -47,7 +44,6 @@ public class OrderMqConsumer2 {
         });
 
         consumer.start();
-
         System.out.println("Consumer Started.");
     }
 }

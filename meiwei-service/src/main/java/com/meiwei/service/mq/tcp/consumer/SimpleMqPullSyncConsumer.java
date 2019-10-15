@@ -21,17 +21,15 @@ public class SimpleMqPullSyncConsumer {
     private static final String MQ_CONFIG_TAG_PUSH = "PID_MEIWEI_SMS_SYNC";
 
     public static void main(String[] args) throws Exception {
-        // 声明并初始化一个 consumer
-        // 需要一个 consumer group 名字作为构造方法的参数
+        // 创建一个 consumer 消费者
         DefaultMQPullConsumer consumer = new DefaultMQPullConsumer("meiwei-consumer-simple-sync-pull");
         // 同样也要设置 NameServer 地址，须要与提供者的地址列表保持一致
         consumer.setNamesrvAddr("127.0.0.1:9876");
-
         // 调用 start() 方法启动 consumer
         consumer.start();
         System.out.println("Simple Consumer Started.");
 
-        // 获取该MessageQueue的消费位点
+        // 获取该 MessageQueue 的消费位点
         Set<MessageQueue> mqs = consumer.fetchSubscribeMessageQueues(MQ_CONFIG_TOPIC);
 
         // 遍历MessageQueue，获取Message
@@ -66,7 +64,6 @@ public class SimpleMqPullSyncConsumer {
                 }
             }
         }
-
     }
 
     private static long getMessageQueueOffset(MessageQueue mq) {

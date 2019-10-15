@@ -24,33 +24,23 @@ public class BroadcastingMqConsumer3 {
     private static final String MQ_CONFIG_TAG_PUSH_OTHER = "PID_MEIWEI_SMS_OTHER";
 
     public static void main(String[] args) throws Exception {
-
-        // 声明并初始化一个 consumer
-        // 需要一个 consumer group 名字作为构造方法的参数
+        // 创建一个 consumer 消费者
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("meiwei-consumer-broadcasting3");
-
         // 同样也要设置 NameServer 地址，须要与提供者的地址列表保持一致
         consumer.setNamesrvAddr("127.0.0.1:9876");
-
         // 设置广播模式
         consumer.setMessageModel(MessageModel.BROADCASTING);
-
         // 设置 consumer 所订阅的 Topic 和 Tag，*代表全部的 Tag
         consumer.subscribe(MQ_CONFIG_TOPIC, MQ_CONFIG_TAG_PUSH + " || " + MQ_CONFIG_TAG_PUSH_OTHER);
 
-        // 注册消息监听者
+        // 注册一个监听器，主要进行消息消费的逻辑处理
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
                 list.forEach(mq->{
                     System.out.printf("Thread: %s, Host: %s, Key: %s, QueueId: %s, Topic: %s, Tags: %s, Message: %s",
                             Thread.currentThread().getName(),
-                            mq.getBornHost(),
-                            mq.getKeys(),
-                            mq.getQueueId(),
-                            mq.getTopic(),
-                            mq.getTags(),
-                            new String(mq.getBody()));
+                            mq.getBornHost(), mq.getKeys(), mq.getQueueId(), mq.getTopic(), mq.getTags(), new String(mq.getBody()));
                     System.out.println();
                 });
 

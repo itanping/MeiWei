@@ -15,9 +15,7 @@ public class OrderMqProducer2 {
 
     public static void main(String[] args) throws Exception {
         DefaultMQProducer producer = new DefaultMQProducer("meiwei-producer-ordermq_demo");
-
         producer.setNamesrvAddr("127.0.0.1:9876");
-
         producer.start();
 
         String[] tags = new String[]{"TagA", "TagC", "TagD"};

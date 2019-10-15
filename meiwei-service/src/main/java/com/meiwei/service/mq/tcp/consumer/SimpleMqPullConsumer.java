@@ -10,6 +10,7 @@ import java.util.Set;
 
 public class SimpleMqPullConsumer {
 
+    // 记录每个 MessageQueue 的消费位点 offset，可以持久化到 DB 或缓存 Redis，这里作为演示就保存在程序中
     private static final Map<MessageQueue, Long> OFFSE_TABLE = new HashMap<MessageQueue, Long>();
 
     // Message 所属的 Topic 一级分类，须要与提供者的频道保持一致才能消费到消息内容
@@ -17,12 +18,10 @@ public class SimpleMqPullConsumer {
     private static final String MQ_CONFIG_TAG_PUSH = "PID_MEIWEI_SMS_PUSH";
 
     public static void main(String[] args) throws Exception {
-        // 声明并初始化一个 consumer
-        // 需要一个 consumer group 名字作为构造方法的参数
+        // 创建一个 consumer 消费者
         DefaultMQPullConsumer consumer = new DefaultMQPullConsumer("meiwei-consumer-pull");
         // 同样也要设置 NameServer 地址，须要与提供者的地址列表保持一致
         consumer.setNamesrvAddr("127.0.0.1:9876");
-
         // 调用 start() 方法启动 consumer
         consumer.start();
         System.out.println("Consumer Started !");

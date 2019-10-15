@@ -22,19 +22,15 @@ import java.util.concurrent.TimeUnit;
 public class OrderMqConsumer {
 
     // Topic 为 Message 所属的一级分类，就像学校里面的初中、高中
-    // Topic 名称长度不得超过 64 字符长度限制，否则会导致无法发送或者订阅
     private static final String MQ_CONFIG_TOPIC = "TOPIC_MEIWEI_SMS_NOTICE_TEST";
-
     // Tag 为 Message 所属的二级分类，比如初中可分为初一、初二、初三；高中可分为高一、高二、高三
     private static final String MQ_CONFIG_TAG_A = "PID_MEIWEI_SMS_ORDER_A";
     private static final String MQ_CONFIG_TAG_B = "PID_MEIWEI_SMS_ORDER_B";
     private static final String MQ_CONFIG_TAG_C = "PID_MEIWEI_SMS_ORDER_C";
 
     public static void main(String[] args) throws Exception {
-        // 声明并初始化一个 consumer
-        // 需要一个 consumer group 名字作为构造方法的参数
+        // 创建一个 consumer 消费者
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("meiwei-consumer-ordermq");
-
         // 同样也要设置 NameServer 地址，须要与提供者的地址列表保持一致
         consumer.setNamesrvAddr("127.0.0.1:9876");
 
@@ -47,10 +43,9 @@ public class OrderMqConsumer {
         // 设置 consumer 所订阅的 Topic 和 Tag，*代表全部的 Tag
         consumer.subscribe(MQ_CONFIG_TOPIC, MQ_CONFIG_TAG_A + " || " + MQ_CONFIG_TAG_B + " || " + MQ_CONFIG_TAG_C);
 
-        // 设置一个Listener，主要进行消息的逻辑处理
+        // 注册一个监听器，主要进行消息消费的逻辑处理
         // 注意这里使用的是 MessageListenerOrderly 这个接口来实现顺序消费
         consumer.registerMessageListener(new MessageListenerOrderly() {
-
             Random random = new Random();
 
             @Override
@@ -60,15 +55,12 @@ public class OrderMqConsumer {
 
                 list.forEach(mq->{
                     System.out.printf("Thread: %s, Topic: %s, Tags: %s, Message: %s",
-                            Thread.currentThread().getName(),
-                            mq.getTopic(),
-                            mq.getTags(),
-                            new String(mq.getBody()));
+                            Thread.currentThread().getName(), mq.getTopic(), mq.getTags(), new String(mq.getBody()));
                     System.out.println();
                 });
 
                 try {
-                    //模拟业务逻辑处理中...
+                    // 模拟业务逻辑处理中...
                     TimeUnit.SECONDS.sleep(random.nextInt(10));
                 } catch (Exception e) {
                     e.printStackTrace();

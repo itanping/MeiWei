@@ -22,18 +22,14 @@ public class DelayTimeMqConsumer {
     private static final String MQ_CONFIG_TAG_PUSH = "PID_MEIWEI_SMS_DELAY_TIME";
 
     public static void main(String[] args) throws Exception {
-
-        // 声明并初始化一个 consumer
-        // 需要一个 consumer group 名字作为构造方法的参数
+        // 创建一个 consumer 消费者
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("meiwei-consumer-delayTime");
-
         // 同样也要设置 NameServer 地址，须要与提供者的地址列表保持一致
         consumer.setNamesrvAddr("127.0.0.1:9876");
-
         // 设置 consumer 所订阅的 Topic 和 Tag，*代表全部的 Tag
         consumer.subscribe(MQ_CONFIG_TOPIC, MQ_CONFIG_TAG_PUSH);
 
-        // 注册消息监听者
+        // 注册一个监听器，主要进行消息消费的逻辑处理
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
@@ -41,11 +37,7 @@ public class DelayTimeMqConsumer {
                     Calendar calendar = Calendar.getInstance();
                     String timeNow = new String(calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
                     System.out.printf("TimeNow: %s, Thread: %s, Topic: %s, Tags: %s, Message: %s",
-                            timeNow,
-                            Thread.currentThread().getName(),
-                            mq.getTopic(),
-                            mq.getTags(),
-                            new String(mq.getBody()));
+                            timeNow, Thread.currentThread().getName(), mq.getTopic(), mq.getTags(), new String(mq.getBody()));
                     System.out.println();
                 });
 
