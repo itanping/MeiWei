@@ -13,6 +13,7 @@ import java.util.Set;
  */
 public class SimpleMqPullSyncConsumer {
 
+    // 记录每个 MessageQueue 的消费位点 offset，可以持久化到 DB 或缓存 Redis，这里作为演示就保存在程序中
     private static final Map<MessageQueue, Long> OFFSE_TABLE = new HashMap<MessageQueue, Long>();
 
     // Message 所属的 Topic 一级分类，须要与提供者的频道保持一致才能消费到消息内容
@@ -30,25 +31,33 @@ public class SimpleMqPullSyncConsumer {
         consumer.start();
         System.out.println("Simple Consumer Started.");
 
+        // 获取该MessageQueue的消费位点
         Set<MessageQueue> mqs = consumer.fetchSubscribeMessageQueues(MQ_CONFIG_TOPIC);
+
+        // 遍历MessageQueue，获取Message
         for (MessageQueue mq : mqs) {
             System.out.printf("Consume from the queue: %s%n", mq);
-
 
             SINGLE_MQ:
             while (true) {
                 try {
+                    // 拉取消息
                     PullResult pullResult = consumer.pullBlockIfNotFound(mq, null, getMessageQueueOffset(mq), 32);
-                    System.out.printf("%s%n", pullResult);
-                    putMessageQueueOffset(mq, pullResult.getNextBeginOffset());
+                    System.out.printf("Pull Message Result: %s%n", pullResult);
 
+                    // 记录offset
+                    putMessageQueueOffset(mq, pullResult.getNextBeginOffset());
                     switch (pullResult.getPullStatus()) {
+                        // 拉取到消息
                         case FOUND:
                             break;
+                        // 没有匹配的消息
                         case NO_MATCHED_MSG:
                             break;
+                        // 暂时没有新消息
                         case NO_NEW_MSG:
                             break SINGLE_MQ;
+                        // offset非法
                         case OFFSET_ILLEGAL:
                             break;
                     }

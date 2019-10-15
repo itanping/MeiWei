@@ -14,6 +14,7 @@ public class DrugsService {
     private static final String MQ_CONFIG_TAG_PUSH = "PID_MEIWEI_SMS_ORDER_TRANSACTION";
 
     public static void main(String[] args) throws Exception {
+        // 声明并初始化一个 consumer
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer();
         // 指定 NameServer 地址列表，多个nameServer地址用半角分号隔开。此处应改为实际 NameServer 地址
         // NameServer 的地址必须有，但也可以通过启动参数指定、环境变量指定的方式设置，不一定要写死在代码里

@@ -38,16 +38,20 @@ public class OrderTransactionListener implements TransactionListener {
         if (null != status) {
             switch (status) {
                 case 0:
+                    // 中间状态，它代表需要检查消息队列来确定状态
                     return LocalTransactionState.UNKNOW;
                 case 1:
+                    // 提交事务，它允许消费者消费此消息
                     return LocalTransactionState.COMMIT_MESSAGE;
                 case 2:
+                    // 回滚事务，它代表该消息将被删除，不允许被消费
                     return LocalTransactionState.ROLLBACK_MESSAGE;
             }
         }
         return LocalTransactionState.COMMIT_MESSAGE;
     }
 
+    // 模拟一个业务场景，并返回订单处理状态
     private Integer executeTransactionResult(String orderId) {
         Integer status = Math.toIntExact(Long.valueOf(orderId) % 3);
         statusMap.put(orderId, status);
