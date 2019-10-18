@@ -21,8 +21,8 @@ public class Retry4ExceptionMqConsumer {
         consumer.setNamesrvAddr("127.0.0.1:9876");
         // 设置 consumer 所订阅的 Topic 和 Tag，*代表全部的 Tag
         consumer.subscribe(MQ_CONFIG_TOPIC, MQ_CONFIG_TAG_PUSH);
-//        // 设置最大重试数次
-//        consumer.setMaxReconsumeTimes(5);
+        // 设置最大重试数次
+        consumer.setMaxReconsumeTimes(4);
 
         // 注册一个监听器，主要进行消息消费的逻辑处理
         consumer.registerMessageListener(new MessageListenerConcurrently() {
@@ -55,6 +55,7 @@ public class Retry4ExceptionMqConsumer {
                     // 获取重试次数
                     int reconsumeTimes = msg.getReconsumeTimes() + 1;
                     System.out.printf(new Date() + "，第 %s 次重试消费，异常信息：%s %n", reconsumeTimes, e);
+                    // 每次重试时间间隔遵循延时等级递增：1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
                     return ConsumeConcurrentlyStatus.RECONSUME_LATER;
                 }
             }

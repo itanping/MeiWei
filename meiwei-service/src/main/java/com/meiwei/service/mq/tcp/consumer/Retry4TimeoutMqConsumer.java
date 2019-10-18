@@ -25,30 +25,33 @@ public class Retry4TimeoutMqConsumer {
         // 设置消费超时时间（默认值15L，为15分钟）
         consumer.setConsumeTimeout(1L);
         // 设置最大重试数次
-        consumer.setMaxReconsumeTimes(4);
+        consumer.setMaxReconsumeTimes(2);
 
         // 注册一个监听器，主要进行消息消费的逻辑处理
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
-
+                // 获取消息
+                MessageExt msg = list.get(0);
                 try {
-                    // 模拟操作：设置一个大于上面已经设置的消费超时时间 来验证超时重试场景（setConsumeTimeout(1L)）
-                    System.out.println("---------- 服务暂停 ----------");
-                    Thread.sleep(1000 * 60 * 2);
+                    // 获取重试次数
+                    int reconsumeTimes = msg.getReconsumeTimes() + 1;
+                    if (reconsumeTimes == 1) {
+                        // 模拟操作：设置一个大于上面已经设置的消费超时时间 来验证超时重试场景（setConsumeTimeout(1L)）
+                        System.out.println("---------- 服务暂停 ---------- " + new Date());
+                        Thread.sleep(1000 * 60 * 2);
+                    } else {
+                        System.out.println("---------- 重试消费 ---------- " + new Date());
+                    }
 
-                    // 模拟业务逻辑。此处为超过最大重试次数，自动标记消息消费成功
-                    list.forEach(msg -> {
-                        System.out.printf("Thread: %s, Topic: %s, Tags: %s, MsgId: %s, Message: %s %n",
-                                Thread.currentThread().getName(), msg.getTopic(), msg.getTags(), msg.getMsgId(), new String(msg.getBody()));
-                    });
+                    System.out.printf(new Date() + " 第 %s 次重试消费：Topic: %s, Tags: %s, MsgId: %s, Message: %s %n",
+                            reconsumeTimes, msg.getTopic(), msg.getTags(), msg.getMsgId(), new String(msg.getBody()));
 
+                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 } catch (Exception e) {
                     System.out.printf(new Date() + "，异常信息：%s %n", e);
                     return ConsumeConcurrentlyStatus.RECONSUME_LATER;
                 }
-
-                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
 
