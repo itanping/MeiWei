@@ -22,7 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 编译时的编码 -->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <springframework.version>4.3.18.RELEASE</springframework.version>
+        <springframework.version>5.2.22.RELEASE</springframework.version>
         <servlet-api.ver>2.5</servlet-api.ver>
     </properties>
 
